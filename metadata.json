@@ -1,0 +1,8 @@
+{
+  "name": "Sohoj Cart BD - Premium E-Commerce Platform",
+  "description": "Full-featured, modern Bangladeshi e-commerce platform with real-time Firestore database, secure admin panel, and seamless order management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

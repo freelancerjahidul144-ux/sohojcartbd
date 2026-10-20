@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80" fill="none" width="100%" height="100%">
+  <defs>
+    <linearGradient id="scbdOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A00" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="scbdGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="scbdNavyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B192C" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <filter id="scbdDropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0B192C" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- CART ICON EMBLEM (Left: x=6 to x=68, y=10 to y=70) -->
+  <g id="cart-emblem" transform="translate(4, 4)">
+    <!-- Back wheel shadow / glow -->
+    <circle cx="34" cy="62" r="6" fill="#0B192C" />
+    <circle cx="34" cy="62" r="2.5" fill="#FFFFFF" />
+    <circle cx="56" cy="62" r="6" fill="#0B192C" />
+    <circle cx="56" cy="62" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cart Basket Body with Dynamic Speed Curvature -->
+    <!-- Handle & Rear Support (Navy Blue) -->
+    <path d="M12 18H20L23.5 28M23.5 28L28.5 48C29 50.5 31 52 33.5 52H57C59.5 52 61.5 50.5 62 48L66 28H23.5Z" 
+          fill="url(#scbdNavyGrad)" 
+          stroke="#0B192C" 
+          stroke-width="1.5" 
+          stroke-linejoin="round" />
+
+    <!-- Interior Shopping Basket Accent Layer (Vibrant Orange) -->
+    <path d="M26 31H63.5L60.5 46C60.2 47.5 58.8 48.5 57 48.5H33.5C31.7 48.5 30.3 47.5 30 46L26 31Z" 
+          fill="url(#scbdOrangeGrad)" />
+
+    <!-- Green Speed Lines / Fast Delivery Swoosh in Cart Basket -->
+    <path d="M18 36H56M14 42H52" 
+          stroke="#10B981" 
+          stroke-width="2.5" 
+          stroke-linecap="round" />
+
+    <!-- Package / Shopping Gift Bag inside Cart (Green & Orange) -->
+    <rect x="34" y="16" width="16" height="14" rx="3" fill="url(#scbdGreenGrad)" transform="rotate(-6 42 23)" filter="url(#scbdDropShadow)" />
+    <!-- Bag handles -->
+    <path d="M38 16V13C38 11.5 39.5 10 41.5 10C43.5 10 45 11.5 45 13V16" 
+          stroke="#FFFFFF" 
+          stroke-width="1.5" 
+          stroke-linecap="round" 
+          fill="none" 
+          transform="rotate(-6 42 23)" />
+
+    <!-- Sparkle / Quick Flash Star (Orange) -->
+    <path d="M57 12L58.5 16.5L63 18L58.5 19.5L57 24L55.5 19.5L51 18L55.5 16.5L57 12Z" fill="#FF7A00" />
+    <circle cx="21" cy="18" r="2.5" fill="#10B981" />
+  </g>
+
+  <!-- BRAND TYPOGRAPHY: "Sohoj Cart BD" -->
+  <!-- "Sohoj" in deep Navy Blue -->
+  <text x="82" y="47" 
+        font-family="'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+        font-size="33" 
+        font-weight="900" 
+        letter-spacing="-0.8px" 
+        fill="#0B192C">Sohoj</text>
+
+  <!-- "Cart" in vibrant Orange -->
+  <text x="174" y="47" 
+        font-family="'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+        font-size="33" 
+        font-weight="900" 
+        letter-spacing="-0.8px" 
+        fill="url(#scbdOrangeGrad)">Cart</text>
+
+  <!-- "BD" Badge in official Green with White lettering -->
+  <g id="bd-badge" transform="translate(254, 21)">
+    <!-- Badge Background Pill (Green) -->
+    <rect x="0" y="0" width="46" height="28" rx="8" fill="url(#scbdGreenGrad)" filter="url(#scbdDropShadow)" />
+    <!-- Subtle top highlight for 3D premium badge feel -->
+    <rect x="1" y="1" width="44" height="13" rx="7" fill="#FFFFFF" fill-opacity="0.2" />
+    <!-- "BD" Letters (White) -->
+    <text x="23" y="19" 
+          font-family="'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+          font-size="16" 
+          font-weight="900" 
+          letter-spacing="0.8px" 
+          fill="#FFFFFF" 
+          text-anchor="middle">BD</text>
+    <!-- Little Orange Accent Dot -->
+    <circle cx="39" cy="8" r="2" fill="#FF7A00" />
+  </g>
+
+  <!-- Subtitle Tagline (Navy & Orange dots) -->
+  <g transform="translate(83, 64)">
+    <text x="0" y="0" 
+          font-family="'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+          font-size="9" 
+          font-weight="800" 
+          letter-spacing="1.8px" 
+          fill="#0B192C" 
+          opacity="0.75">SMART ONLINE SHOPPING</text>
+    <circle cx="168" cy="-3" r="2" fill="#FF7A00" />
+    <circle cx="175" cy="-3" r="2" fill="#10B981" />
+  </g>
+</svg>

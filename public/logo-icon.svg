@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none" width="100%" height="100%">
+  <defs>
+    <linearGradient id="iconOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A00" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="iconGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="iconNavyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B192C" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <filter id="iconDropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0B192C" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle (White or Navy) -->
+  <rect x="2" y="2" width="76" height="76" rx="20" fill="#FFFFFF" stroke="#0B192C" stroke-width="1.5" stroke-opacity="0.08" />
+
+  <g transform="translate(6, 6)">
+    <!-- Wheels -->
+    <circle cx="28" cy="55" r="5.5" fill="#0B192C" />
+    <circle cx="28" cy="55" r="2.2" fill="#FFFFFF" />
+    <circle cx="48" cy="55" r="5.5" fill="#0B192C" />
+    <circle cx="48" cy="55" r="2.2" fill="#FFFFFF" />
+
+    <!-- Cart Basket Body -->
+    <path d="M8 15H15L18.5 24M18.5 24L23 42C23.5 44.5 25.5 46 27.5 46H48.5C50.5 46 52.5 44.5 53 42L56.5 24H18.5Z" 
+          fill="url(#iconNavyGrad)" 
+          stroke="#0B192C" 
+          stroke-width="1.5" 
+          stroke-linejoin="round" />
+
+    <!-- Interior Basket Accent Layer (Orange) -->
+    <path d="M21 27H54L51.5 40C51.2 41.5 50 42.5 48.5 42.5H27.5C26 42.5 24.8 41.5 24.5 40L21 27Z" 
+          fill="url(#iconOrangeGrad)" />
+
+    <!-- Green Speed Lines -->
+    <path d="M14 31H48M10 36H44" 
+          stroke="#10B981" 
+          stroke-width="2.2" 
+          stroke-linecap="round" />
+
+    <!-- Package in Cart (Green) -->
+    <rect x="28" y="12" width="14" height="12" rx="2.5" fill="url(#iconGreenGrad)" transform="rotate(-6 35 18)" filter="url(#iconDropShadow)" />
+    <path d="M31.5 12V9.5C31.5 8.2 32.7 7 34.5 7C36.3 7 37.5 8.2 37.5 9.5V12" 
+          stroke="#FFFFFF" 
+          stroke-width="1.2" 
+          stroke-linecap="round" 
+          fill="none" 
+          transform="rotate(-6 35 18)" />
+
+    <!-- Sparkle Star (Orange) -->
+    <path d="M49 9L50.5 13.5L55 15L50.5 16.5L49 21L47.5 16.5L43 15L47.5 13.5L49 9Z" fill="#FF7A00" />
+    <circle cx="16" cy="15" r="2.2" fill="#10B981" />
+  </g>
+</svg>

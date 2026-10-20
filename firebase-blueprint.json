@@ -1,0 +1,192 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An e-commerce product available in the store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 10000 },
+        "price": { "type": "number" },
+        "discountPrice": { "type": "number" },
+        "discountPercentage": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "stock": { "type": "number" },
+        "category": { "type": "string", "maxLength": 100 },
+        "categoryId": { "type": "string", "maxLength": 128 },
+        "sku": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["published", "draft", "archived"] },
+        "isFeatured": { "type": "boolean" },
+        "isBestseller": { "type": "boolean" },
+        "images": { "type": "array" },
+        "specifications": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "price", "category", "stock", "status"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product categorization grouping",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 500 },
+        "image": { "type": "string", "maxLength": 1000 },
+        "icon": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "displayOrder": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "slug", "isActive"]
+    },
+    "Banner": {
+      "title": "Banner",
+      "description": "Storefront promotional or hero banner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "subtitle": { "type": "string", "maxLength": 300 },
+        "image": { "type": "string", "maxLength": 1000 },
+        "buttonText": { "type": "string", "maxLength": 60 },
+        "buttonLink": { "type": "string", "maxLength": 500 },
+        "displayOrder": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "position": { "type": "string", "enum": ["hero", "promo", "deal"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "image", "isActive"]
+    },
+    "Advertisement": {
+      "title": "Advertisement",
+      "description": "Store commercial or promotional banner ad",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "image": { "type": "string", "maxLength": 1000 },
+        "linkUrl": { "type": "string", "maxLength": 500 },
+        "position": { "type": "string", "enum": ["homepage", "product_page", "bottom", "promotional"] },
+        "isActive": { "type": "boolean" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "image", "position", "isActive"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 64 },
+        "customerName": { "type": "string", "maxLength": 150 },
+        "customerEmail": { "type": "string", "maxLength": 150 },
+        "customerPhone": { "type": "string", "maxLength": 30 },
+        "customerAddress": { "type": "string", "maxLength": 500 },
+        "customerCity": { "type": "string", "maxLength": 100 },
+        "deliveryCharge": { "type": "number" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "paymentStatus": { "type": "string", "enum": ["Pending", "Paid", "Failed"] },
+        "orderStatus": { "type": "string", "enum": ["Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"] },
+        "items": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["customerName", "customerPhone", "customerAddress", "customerCity", "totalAmount", "orderStatus"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Product review submitted by customer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 150 },
+        "customerEmail": { "type": "string", "maxLength": 150 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["productId", "customerName", "rating", "comment"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized administrator user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["admin", "superadmin"] },
+        "name": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    },
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "General settings for Sohoj Cart BD",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "storeName": { "type": "string", "maxLength": 100 },
+        "contactEmail": { "type": "string", "maxLength": 150 },
+        "contactPhone": { "type": "string", "maxLength": 50 },
+        "address": { "type": "string", "maxLength": 300 },
+        "currencySymbol": { "type": "string", "maxLength": 10 },
+        "deliveryFeeInsideDhaka": { "type": "number" },
+        "deliveryFeeOutsideDhaka": { "type": "number" },
+        "freeDeliveryThreshold": { "type": "number" },
+        "isStoreLive": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Master catalog of products"
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Product categories"
+    },
+    "/banners/{bannerId}": {
+      "schema": { "$ref": "#/entities/Banner" },
+      "description": "Promotional and hero banners"
+    },
+    "/advertisements/{adId}": {
+      "schema": { "$ref": "#/entities/Advertisement" },
+      "description": "Display advertisements placed across customer views"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer purchase orders and fulfillment tracking"
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Customer ratings and feedback on products"
+    },
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Administrator authorizations and permissions"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/StoreSettings" },
+      "description": "Store configuration and operational flags"
+    }
+  }
+}

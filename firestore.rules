@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'freelancerjahidul144@gmail.com' ||
+        request.auth.token.email == 'admin@sohojcartbd.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Connection testing
+    match /test/{testId} {
+      allow read, write: if true;
+    }
+
+    // Products catalog
+    match /products/{productId} {
+      allow read, write: if true;
+    }
+
+    // Categories
+    match /categories/{categoryId} {
+      allow read, write: if true;
+    }
+
+    // Banners
+    match /banners/{bannerId} {
+      allow read, write: if true;
+    }
+
+    // Advertisements
+    match /advertisements/{adId} {
+      allow read, write: if true;
+    }
+
+    // Reviews
+    match /reviews/{reviewId} {
+      allow read, write: if true;
+    }
+
+    // Orders - Allow read and write so admin can change order status, confirm, cancel, ship, deliver
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+
+    // Admins
+    match /admins/{adminUid} {
+      allow read, write: if true;
+    }
+
+    // Store settings
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+  }
+}
