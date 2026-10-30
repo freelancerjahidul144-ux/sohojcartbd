@@ -7,6 +7,7 @@ import { Footer } from './components/common/Footer';
 import { CartDrawer } from './components/common/CartDrawer';
 import { ToastContainer } from './components/common/Toast';
 import { StickyBottomBar } from './components/common/StickyBottomBar';
+import { FloatingSocialBar } from './components/common/FloatingSocialBar';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
@@ -27,13 +28,24 @@ import { AdminAds } from './admin/AdminAds';
 import { AdminOrders } from './admin/AdminOrders';
 import { AdminCustomers } from './admin/AdminCustomers';
 import { AdminSettings } from './admin/AdminSettings';
+import { LiveTrafficMonitor } from './admin/LiveTrafficMonitor';
+import { trackPageView } from './services/analyticsService';
 
 import { Order } from './types';
 import { Loader2, MessageCircle } from 'lucide-react';
 
 function MainApp() {
-  const { isAdmin, loading: authLoading } = useAuth();
-  const { settings } = useStore();
+  const { isAdmin, currentUser, loading: authLoading } = useAuth();
+  const { settings, products } = useStore();
+  const { addToCart, buyNow } = useCart();
+
+  const isManager = Boolean(
+    settings.isManagerAccessEnabled &&
+    settings.managerEmail &&
+    currentUser?.email &&
+    currentUser.email.toLowerCase() === settings.managerEmail.toLowerCase().trim()
+  );
+  const isAuthorizedStaff = isAdmin || isManager;
 
   // Route state initialized from browser window.location.pathname
   const [currentPath, setCurrentPath] = useState<string>(() => {
@@ -78,6 +90,43 @@ function MainApp() {
     };
   }, [settings.isAdsterraEnabled, settings.adsterraHeaderScript]);
 
+  // Real-time page view and visitor tracking (runs unconditionally at top level)
+  useEffect(() => {
+    if (currentPath.startsWith('/admin')) return;
+    const isProducts = currentPath === '/products';
+    const isCart = currentPath === '/cart';
+    const isCheckout = currentPath === '/checkout';
+    const isOrderSuccess = currentPath === '/order-success';
+    const isTrackOrder = currentPath === '/track-order';
+    const isProductDetail = currentPath.startsWith('/product/');
+    const prodId = isProductDetail ? currentPath.replace('/product/', '') : '';
+    const prod = isProductDetail ? products.find((p) => p.id === prodId) : null;
+
+    const title = prod?.name
+      ? `${prod.name} - পণ্য বিবরণ`
+      : isCheckout
+      ? 'অর্ডার চেকআউট (Checkout)'
+      : isCart
+      ? 'শপিং কার্ট (Cart)'
+      : isProducts
+      ? 'সব পণ্য ক্যাটালগ (All Products)'
+      : isTrackOrder
+      ? 'অর্ডার ট্র্যাকিং (Track Order)'
+      : isOrderSuccess
+      ? 'অর্ডার সফল (Order Success)'
+      : 'হোমপেজ ও হট ডিল (Home)';
+
+    trackPageView(currentPath, title);
+
+    const heartbeat = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        trackPageView(currentPath, title);
+      }
+    }, 60000);
+
+    return () => clearInterval(heartbeat);
+  }, [currentPath, products]);
+
   // Universal navigation helper
   const navigate = (path: string) => {
     // Normalise short codes
@@ -111,74 +160,7 @@ function MainApp() {
     navigate('/order-success');
   };
 
-  // Determine active view from currentPath
-  const isVisitingAdmin = currentPath.startsWith('/admin');
-
-  // ADMIN ROUTE PROTECTION
-  if (isVisitingAdmin) {
-    // Wait for Firebase Auth initialization to avoid flashing login on refresh
-    if (authLoading) {
-      return (
-        <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-white space-y-3">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-          <p className="text-xs text-gray-400 font-mono">Verifying Firebase Authentication...</p>
-        </div>
-      );
-    }
-
-    // 1. Admin Login Page: /admin/login
-    if (currentPath === '/admin/login') {
-      // If already logged in as authorized admin, redirect to /admin/dashboard
-      if (isAdmin) {
-        navigate('/admin/dashboard');
-        return null;
-      }
-
-      return (
-        <AdminLogin
-          onSuccess={() => navigate('/admin/dashboard')}
-          onBackToStore={() => navigate('/')}
-        />
-      );
-    }
-
-    // 2. Protect all other /admin/* routes:
-    // If not authenticated as authorized admin, redirect to /admin/login
-    if (!isAdmin) {
-      navigate('/admin/login');
-      return null;
-    }
-
-    // Determine active admin tab from path (default: dashboard)
-    const adminTabMatch = currentPath.replace('/admin/', '').replace('/admin', '');
-    const activeTab = adminTabMatch || 'dashboard';
-
-    return (
-      <AdminLayout
-        currentTab={activeTab}
-        onSelectTab={(tab) => navigate(`/admin/${tab}`)}
-        onExitAdmin={() => navigate('/')}
-        onLogoutAdmin={() => navigate('/admin/login')}
-      >
-        {(activeTab === 'dashboard' || activeTab === '') && (
-          <AdminDashboard onNavigateTab={(tab) => navigate(`/admin/${tab}`)} />
-        )}
-        {activeTab === 'hotdeals' && <AdminHotDeals />}
-        {activeTab === 'products' && <AdminProducts />}
-        {activeTab === 'categories' && <AdminCategories />}
-        {activeTab === 'banners' && <AdminBanners />}
-        {activeTab === 'ads' && <AdminAds />}
-        {activeTab === 'orders' && <AdminOrders />}
-        {activeTab === 'customers' && <AdminCustomers />}
-        {activeTab === 'settings' && <AdminSettings />}
-      </AdminLayout>
-    );
-  }
-
-  const { products } = useStore();
-  const { addToCart, buyNow } = useCart();
-
-  // CUSTOMER STOREFRONT
+  // CUSTOMER STOREFRONT HELPERS
   const isProductsPage = currentPath === '/products';
   const isCartPage = currentPath === '/cart';
   const isCheckoutPage = currentPath === '/checkout';
@@ -200,6 +182,69 @@ function MainApp() {
       navigate('/checkout');
     }
   };
+
+  // ADMIN ROUTE PROTECTION
+  const isVisitingAdmin = currentPath.startsWith('/admin');
+  if (isVisitingAdmin) {
+    // Wait for Firebase Auth initialization to avoid flashing login on refresh
+    if (authLoading) {
+      return (
+        <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-white space-y-3">
+          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+          <p className="text-xs text-gray-400 font-mono">Verifying Firebase Authentication...</p>
+        </div>
+      );
+    }
+
+    // 1. Admin Login Page: /admin/login
+    if (currentPath === '/admin/login') {
+      // If already logged in as authorized admin or manager, redirect to /admin/dashboard
+      if (isAuthorizedStaff) {
+        navigate('/admin/dashboard');
+        return null;
+      }
+
+      return (
+        <AdminLogin
+          onSuccess={() => navigate('/admin/dashboard')}
+          onBackToStore={() => navigate('/')}
+        />
+      );
+    }
+
+    // 2. Protect all other /admin/* routes:
+    // If not authenticated as authorized admin or manager, redirect to /admin/login
+    if (!isAuthorizedStaff) {
+      navigate('/admin/login');
+      return null;
+    }
+
+    // Determine active admin tab from path (default: dashboard)
+    const adminTabMatch = currentPath.replace('/admin/', '').replace('/admin', '');
+    const activeTab = adminTabMatch || 'dashboard';
+
+    return (
+      <AdminLayout
+        currentTab={activeTab}
+        onSelectTab={(tab) => navigate(`/admin/${tab}`)}
+        onExitAdmin={() => navigate('/')}
+        onLogoutAdmin={() => navigate('/admin/login')}
+      >
+        {(activeTab === 'dashboard' || activeTab === '') && (
+          <AdminDashboard onNavigateTab={(tab) => navigate(`/admin/${tab}`)} />
+        )}
+        {activeTab === 'analytics' && <LiveTrafficMonitor />}
+        {activeTab === 'hotdeals' && <AdminHotDeals />}
+        {activeTab === 'products' && <AdminProducts />}
+        {activeTab === 'categories' && <AdminCategories />}
+        {activeTab === 'banners' && <AdminBanners />}
+        {activeTab === 'ads' && <AdminAds />}
+        {activeTab === 'orders' && <AdminOrders />}
+        {activeTab === 'customers' && <AdminCustomers />}
+        {activeTab === 'settings' && <AdminSettings />}
+      </AdminLayout>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-emerald-500 selection:text-white">
@@ -272,6 +317,9 @@ function MainApp() {
           </span>
         </a>
       )}
+
+      {/* Floating Social Media Icons/Popup Bar */}
+      {!currentPath.startsWith('/admin') && <FloatingSocialBar />}
 
       {/* Customer Auth Modal */}
       <AuthModal
