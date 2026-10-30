@@ -69,5 +69,14 @@ service cloud.firestore {
     match /settings/{settingId} {
       allow read, write: if true;
     }
+
+    // Analytics & Real-time Live Visitors
+    match /analytics/{docId} {
+      allow read, write: if true;
+    }
+
+    match /visitors/{visitorId} {
+      allow read, write: if true;
+    }
   }
 }
